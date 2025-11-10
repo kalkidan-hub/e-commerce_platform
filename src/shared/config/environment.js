@@ -13,6 +13,9 @@ const getEnv = (key, defaultValue = undefined) => {
 const config = {
   nodeEnv: getEnv('NODE_ENV', 'development'),
   port: parseInt(getEnv('PORT', '3000'), 10),
+  database: {
+    mongoUri: getEnv('MONGODB_URI', 'mongodb://localhost:27017/ecommerce_platform'),
+  },
   jwt: {
     secret: getEnv('JWT_SECRET', 'change-me'),
     expiresIn: getEnv('JWT_EXPIRES_IN', '1h'),

@@ -8,9 +8,9 @@ class AuthController {
 
   async register(req, res, next) {
     try {
-      const { username, email, password } = req.body;
+      const { username, email, password, role } = req.body;
 
-      const user = await this.registerUserUseCase.execute({ username, email, password });
+      const user = await this.registerUserUseCase.execute({ username, email, password, role });
 
       const response = new BaseResponse({
         success: true,

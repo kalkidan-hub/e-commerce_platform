@@ -10,7 +10,9 @@ class LoginUserUseCase {
   }
 
   async execute({ email, password }) {
-    const user = await this.userRepository.findByEmail(email);
+    const normalizedEmail = typeof email === 'string' ? email.trim() : '';
+
+    const user = await this.userRepository.findByEmail(normalizedEmail);
     if (!user) {
       throw new AppError('Invalid credentials', 401, ['InvalidCredentials']);
     }
@@ -23,6 +25,7 @@ class LoginUserUseCase {
     const payload = {
       userId: user.id,
       username: user.username,
+      role: user.role,
     };
 
     const token = jwt.sign(payload, config.jwt.secret, {
@@ -35,6 +38,7 @@ class LoginUserUseCase {
         id: user.id,
         username: user.username,
         email: user.email,
+        role: user.role,
       },
     };
   }

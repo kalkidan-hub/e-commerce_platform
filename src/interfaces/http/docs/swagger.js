@@ -14,7 +14,19 @@ const swaggerDefinition = {
       description: 'Primary API server',
     },
   ],
+  security: [
+    {
+      bearerAuth: [],
+    },
+  ],
   components: {
+    securitySchemes: {
+      bearerAuth: {
+        type: 'http',
+        scheme: 'bearer',
+        bearerFormat: 'JWT',
+      },
+    },
     schemas: {
       BaseResponse: {
         type: 'object',

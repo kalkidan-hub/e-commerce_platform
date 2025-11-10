@@ -14,19 +14,23 @@ const passwordValidationRules = [
   },
 ];
 
+const allowedRoles = ['Customer', 'Admin'];
+
 const registerValidator = (req, res, next) => {
   const errors = [];
-  const { username, email, password } = req.body || {};
+  const { username, email, password, role } = req.body || {};
 
-  if (!username) {
+  const usernameValue = typeof username === 'string' ? username.trim() : '';
+  if (!usernameValue) {
     errors.push('Username is required');
-  } else if (!usernameRegex.test(username)) {
+  } else if (!usernameRegex.test(usernameValue)) {
     errors.push('Username must be alphanumeric without spaces or special characters');
   }
 
-  if (!email) {
+  const emailValue = typeof email === 'string' ? email.trim() : '';
+  if (!emailValue) {
     errors.push('Email is required');
-  } else if (!emailRegex.test(email)) {
+  } else if (!emailRegex.test(emailValue)) {
     errors.push('Email must be a valid email address');
   }
 
@@ -38,6 +42,10 @@ const registerValidator = (req, res, next) => {
         errors.push(rule.message);
       }
     });
+  }
+
+  if (role && !allowedRoles.includes(role)) {
+    errors.push('Role must be either Customer or Admin');
   }
 
   if (errors.length > 0) {

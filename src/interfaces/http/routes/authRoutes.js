@@ -36,6 +36,10 @@ const authController = new AuthController(registerUserUseCase, loginUserUseCase)
  *                 type: string
  *                 format: password
  *                 example: StrongPass!1
+ *               role:
+ *                 type: string
+ *                 enum: [Customer, Admin]
+ *                 description: Optional, defaults to Customer
  *     responses:
  *       201:
  *         description: User registered successfully

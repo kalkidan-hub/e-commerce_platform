@@ -1,6 +1,7 @@
 const express = require('express');
 const cors = require('cors');
 const morgan = require('morgan');
+const path = require('path');
 const swaggerUi = require('swagger-ui-express');
 
 const routes = require('./routes');
@@ -13,6 +14,8 @@ const createServer = () => {
   app.use(express.json());
   app.use(express.urlencoded({ extended: true }));
   app.use(morgan('dev'));
+
+  app.use('/uploads', express.static(path.resolve(__dirname, '../../..', 'uploads')));
 
   app.use('/api/docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
