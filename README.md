@@ -59,6 +59,24 @@ docker exec -it mongo mongosh --eval "rs.initiate()"
 
    Swagger UI is served at `http://localhost:3000/api/docs`.
 
+## Running with Docker
+
+1. Copy or create a `.env` file with the environment variables you need (optional if you are fine with the defaults in `docker-compose.yml`).
+2. Build and start the stack (Mongo replica set + API):
+
+   ```bash
+   docker-compose up --build
+   ```
+
+3. Once the containers are healthy, the API is available at `http://localhost:3000` and MongoDB is exposed on `mongodb://localhost:27017` (inside the network use `mongo:27017`).
+
+> **Tip:** The compose stack mounts `mongo-init.js` to automatically initialise the single-node replica set (`rs0`). You only need to run `docker-compose up`—no manual `rs.initiate()` call required.
+
+### Docker Troubleshooting
+
+- **Port 27017 already in use:** Stop any local Mongo instance (e.g. `docker rm -f mongo`) or change the mapped port in `docker-compose.yml`.
+- **`ReplicaSetNoPrimary` error:** Usually means the replica set hasn’t finished initialising. Run `docker-compose down -v && docker-compose up --build` to recreate the data volume, or execute `docker exec -it <mongo-container> mongosh --eval "rs.initiate()"` once.
+
 ## Environment Variables
 
 | Variable                   | Description                                           | Default                                  |

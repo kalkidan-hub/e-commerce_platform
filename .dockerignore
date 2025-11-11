@@ -1,0 +1,16 @@
+node_modules
+npm-debug.log
+yarn-debug.log
+pnpm-debug.log
+.git
+.gitignore
+.env
+.env.*
+coverage
+dist
+build
+uploads
+__tests__
+jest.config.js
+jest.setup.js
+
