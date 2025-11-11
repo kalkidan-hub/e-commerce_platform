@@ -17,11 +17,13 @@ const createServer = () => {
   app.use(express.urlencoded({ extended: true }));
   app.use(morgan('dev'));
 
-  const rateLimiter = createRateLimiter({
-    windowMs: Number(config.rateLimit?.windowMs) || 15 * 60 * 1000,
-    max: Number(config.rateLimit?.maxRequests) || 100,
-  });
-  app.use(rateLimiter);
+  if (config.nodeEnv !== 'test') {
+    const rateLimiter = createRateLimiter({
+      windowMs: Number(config.rateLimit?.windowMs) || 15 * 60 * 1000,
+      max: Number(config.rateLimit?.maxRequests) || 100,
+    });
+    app.use(rateLimiter);
+  }
 
   app.use('/uploads', express.static(path.resolve(__dirname, '../../..', 'uploads')));
 
