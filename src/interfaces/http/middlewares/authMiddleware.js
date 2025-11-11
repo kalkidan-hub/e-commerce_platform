@@ -38,15 +38,20 @@ const authenticate = async (req, res, next) => {
   }
 };
 
-const authorizeAdmin = (req, res, next) => {
-  if (!req.user || req.user.role !== 'Admin') {
-    return next(new AppError('Forbidden', 403, ['Forbidden']));
-  }
-  return next();
-};
+const authorizeRoles =
+  (...roles) =>
+  (req, res, next) => {
+    if (!req.user || !roles.includes(req.user.role)) {
+      return next(new AppError('Forbidden', 403, ['Forbidden']));
+    }
+    return next();
+  };
+
+const authorizeAdmin = authorizeRoles('Admin');
 
 module.exports = {
   authenticate,
   authorizeAdmin,
+  authorizeRoles,
 };
 

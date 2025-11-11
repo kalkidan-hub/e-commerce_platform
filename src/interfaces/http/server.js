@@ -6,6 +6,8 @@ const swaggerUi = require('swagger-ui-express');
 
 const routes = require('./routes');
 const { swaggerSpec } = require('./docs/swagger');
+const { createRateLimiter } = require('../../shared/middlewares/rateLimiter');
+const { config } = require('../../shared/config/environment');
 
 const createServer = () => {
   const app = express();
@@ -14,6 +16,12 @@ const createServer = () => {
   app.use(express.json());
   app.use(express.urlencoded({ extended: true }));
   app.use(morgan('dev'));
+
+  const rateLimiter = createRateLimiter({
+    windowMs: Number(config.rateLimit?.windowMs) || 15 * 60 * 1000,
+    max: Number(config.rateLimit?.maxRequests) || 100,
+  });
+  app.use(rateLimiter);
 
   app.use('/uploads', express.static(path.resolve(__dirname, '../../..', 'uploads')));
 

@@ -20,6 +20,10 @@ const config = {
     secret: getEnv('JWT_SECRET', 'change-me'),
     expiresIn: getEnv('JWT_EXPIRES_IN', '1h'),
   },
+  rateLimit: {
+    windowMs: parseInt(getEnv('RATE_LIMIT_WINDOW_MS', `${15 * 60 * 1000}`), 10),
+    maxRequests: parseInt(getEnv('RATE_LIMIT_MAX_REQUESTS', '100'), 10),
+  },
 };
 
 module.exports = { config };

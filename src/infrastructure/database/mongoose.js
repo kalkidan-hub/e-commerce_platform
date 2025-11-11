@@ -22,8 +22,26 @@ const disconnectMongo = async () => {
   }
 };
 
+const runInTransaction = async (callback) => {
+  const session = await mongoose.startSession();
+  let result;
+  try {
+    session.startTransaction();
+    result = await callback(session);
+    await session.commitTransaction();
+  } catch (error) {
+    await session.abortTransaction();
+    throw error;
+  } finally {
+    session.endSession();
+  }
+
+  return result;
+};
+
 module.exports = {
   connectMongo,
   disconnectMongo,
+  runInTransaction,
 };
 
